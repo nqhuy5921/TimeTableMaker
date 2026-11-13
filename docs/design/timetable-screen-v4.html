@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TimeTableMaker - 6A1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    .tnum {
+      font-feature-settings: 'tnum';
+    }
+    /* Custom scrollbar for panels */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #e3e8ee;
+      border-radius: 4px;
+    }
+    .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+      background: #8fa2bb;
+    }
+  </style>
+</head>
+<body>
+  <div class="h-screen flex flex-col font-light text-[15px] text-[#0d253d] bg-[#f6f9fc]">
+    
+    <!-- TopBar -->
+    <header class="flex items-center gap-6 px-6 bg-[#0d253d] text-white h-[56px] shrink-0">
+      <div class="flex items-center gap-2 text-[18px]">
+        <span class="w-5 h-5 rounded-[6px] bg-[#665efd]" style="background-image: linear-gradient(#0d253d, #0d253d), linear-gradient(#0d253d, #0d253d); background-size: 2px 100%, 100% 2px; background-position: 50% 0, 0 50%; background-repeat: no-repeat;"></span>
+        TimeTableMaker
+      </div>
+      <nav class="flex h-full gap-1 items-center">
+        <a href="#" class="block px-3 py-1 rounded-full text-[14px] font-normal text-white bg-[rgba(255,255,255,0.12)]" id="nav-timetable">Timetable</a>
+        <a href="#" class="block px-3 py-1 rounded-full text-[14px] font-normal text-[#8fa2bb] hover:text-white transition-colors" id="nav-cards">Cards</a>
+        <a href="#" class="block px-3 py-1 rounded-full text-[14px] font-normal text-[#8fa2bb] hover:text-white transition-colors" id="nav-teachers">Teachers</a>
+        <a href="#" class="block px-3 py-1 rounded-full text-[14px] font-normal text-[#8fa2bb] hover:text-white transition-colors" id="nav-classes">Classes</a>
+        <a href="#" class="block px-3 py-1 rounded-full text-[14px] font-normal text-[#8fa2bb] hover:text-white transition-colors" id="nav-rooms">Rooms</a>
+        <a href="#" class="block px-3 py-1 rounded-full text-[14px] font-normal text-[#8fa2bb] hover:text-white transition-colors" id="nav-subjects">Subjects</a>
+      </nav>
+      <div class="ml-auto text-[13px] font-normal text-[#8fa2bb] tnum">
+        Version 0.1.0
+      </div>
+    </header>
+
+    <!-- Main Scrollable Area -->
+    <main class="flex-1 min-h-0 overflow-hidden p-6">
+      
+      <div class="flex flex-col gap-6 h-full min-h-0">
+        
+        <!-- Header Section: Grade/Class Selector & Title/Stats -->
+        <div class="flex flex-col gap-4 shrink-0">
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="flex gap-1 bg-white p-1 rounded-full border border-[#e3e8ee] shadow-[0_1px_3px_rgba(0,55,112,0.04)]">
+              <button class="px-3 py-1 rounded-full text-[13px] font-normal bg-[#0d253d] text-white">Grade 6</button>
+              <button class="px-3 py-1 rounded-full text-[13px] font-normal text-[#64748d] hover:text-[#0d253d]">Grade 7</button>
+              <button class="px-3 py-1 rounded-full text-[13px] font-normal text-[#64748d] hover:text-[#0d253d]">Grade 8</button>
+              <button class="px-3 py-1 rounded-full text-[13px] font-normal text-[#64748d] hover:text-[#0d253d]">Grade 9</button>
+            </div>
+            <div class="w-px h-5 bg-[#e3e8ee] mx-2"></div>
+            <div class="flex gap-2">
+              <button class="flex flex-col justify-center px-3 py-1 rounded-[6px] bg-white border border-[#533afd] text-[#0d253d] text-[13px] font-normal shadow-[0_1px_3px_rgba(0,55,112,0.04)] w-[64px]">
+                <span class="leading-none mb-1 text-center">6A1</span>
+                <div class="w-full h-[3px] bg-[#e3e8ee] rounded-full overflow-hidden"><div class="h-full bg-[#533afd] w-[76%]"></div></div>
+              </button>
+              <button class="flex flex-col justify-center px-3 py-1 rounded-[6px] bg-white border border-[#e3e8ee] hover:border-[#a8c3de] text-[#64748d] text-[13px] font-normal w-[64px]">
+                <span class="leading-none mb-1 text-center">6A2</span>
+                <div class="w-full h-[3px] bg-[#e3e8ee] rounded-full overflow-hidden"><div class="h-full bg-[#64748d] w-[60%]"></div></div>
+              </button>
+              <button class="flex flex-col justify-center px-3 py-1 rounded-[6px] bg-white border border-[#e3e8ee] hover:border-[#a8c3de] text-[#64748d] text-[13px] font-normal w-[64px]">
+                <span class="leading-none mb-1 text-center">6A3</span>
+                <div class="w-full h-[3px] bg-[#e3e8ee] rounded-full overflow-hidden"><div class="h-full bg-[#64748d] w-[45%]"></div></div>
+              </button>
+              <button class="flex flex-col justify-center px-3 py-1 rounded-[6px] bg-white border border-[#e3e8ee] hover:border-[#a8c3de] text-[#64748d] text-[13px] font-normal w-[64px]">
+                <span class="leading-none mb-1 text-center">6AA1</span>
+                <div class="w-full h-[3px] bg-[#e3e8ee] rounded-full overflow-hidden"><div class="h-full bg-[#64748d] w-[80%]"></div></div>
+              </button>
+              <button class="flex flex-col justify-center px-3 py-1 rounded-[6px] bg-white border border-[#e3e8ee] hover:border-[#a8c3de] text-[#64748d] text-[13px] font-normal w-[64px]">
+                <span class="leading-none mb-1 text-center">6CE1</span>
+                <div class="w-full h-[3px] bg-[#e3e8ee] rounded-full overflow-hidden"><div class="h-full bg-[#64748d] w-[30%]"></div></div>
+              </button>
+              <button class="flex flex-col justify-center px-3 py-1 rounded-[6px] bg-white border border-[#e3e8ee] hover:border-[#a8c3de] text-[#64748d] text-[13px] font-normal w-[64px]">
+                <span class="leading-none mb-1 text-center">6CE2</span>
+                <div class="w-full h-[3px] bg-[#e3e8ee] rounded-full overflow-hidden"><div class="h-full bg-[#64748d] w-[100%]"></div></div>
+              </button>
+              <button class="flex flex-col justify-center px-3 py-1 rounded-[6px] bg-white border border-[#e3e8ee] hover:border-[#a8c3de] text-[#64748d] text-[13px] font-normal w-[64px]">
+                <span class="leading-none mb-1 text-center">6B1</span>
+                <div class="w-full h-[3px] bg-[#e3e8ee] rounded-full overflow-hidden"><div class="h-full bg-[#64748d] w-[50%]"></div></div>
+              </button>
+              <button class="flex flex-col justify-center px-3 py-1 rounded-[6px] bg-white border border-[#e3e8ee] hover:border-[#a8c3de] text-[#64748d] text-[13px] font-normal w-[64px]">
+                <span class="leading-none mb-1 text-center">6BA1</span>
+                <div class="w-full h-[3px] bg-[#e3e8ee] rounded-full overflow-hidden"><div class="h-full bg-[#64748d] w-[20%]"></div></div>
+              </button>
+            </div>
+          </div>
+          
+          <div class="flex items-end justify-between">
+            <div class="flex items-end gap-4">
+              <h1 class="text-[32px] font-light tracking-[-0.64px] m-0 text-[#0d253d] leading-none">
+                6A1
+              </h1>
+              <span class="text-[13px] font-normal text-[#64748d] tracking-[-0.39px] mb-1">
+                Grade 6 · Track A · Form teacher T. Hoa
+              </span>
+            </div>
+            <div class="flex gap-2">
+              <span class="px-3 py-1 border border-[#e3e8ee] rounded-full bg-white text-[13px] font-normal text-[#0d253d] tracking-[-0.39px]">
+                Placed 38/50
+              </span>
+              <span class="px-3 py-1 border border-[#e3e8ee] rounded-full bg-white text-[13px] font-normal text-[#0d253d] tracking-[-0.39px]">
+                Cards 11
+              </span>
+              <span class="px-3 py-1 border border-[#ea2261] rounded-full bg-[#fdeef5] text-[13px] font-normal text-[#ea2261] tracking-[-0.39px]">
+                Issues 5
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content Area: Cards | Grid | Issues -->
+        <div class="flex gap-6 flex-1 min-h-0">
+          
+          <!-- Left Card Panel -->
+          <aside class="w-[280px] shrink-0 flex flex-col bg-white border border-[#e3e8ee] rounded-xl shadow-[0_1px_3px_rgba(0,55,112,0.08)] overflow-hidden h-full min-h-0" aria-label="Cards">
+            <div class="px-4 py-3 border-b border-[#e3e8ee] flex items-center justify-between bg-[#f6f9fc] shrink-0">
+              <h2 class="text-[14px] font-normal m-0 text-[#0d253d]">
+                Cards
+              </h2>
+              <iconify-icon icon="lucide:filter" class="text-[#64748d] cursor-pointer hover:text-[#0d253d]"></iconify-icon>
+            </div>
+            
+            <div class="flex flex-col overflow-y-auto custom-scrollbar flex-1">
+              <!-- Subject rows ... generating ~14 rows -->
+              <div class="flex items-center gap-3 px-3 py-2 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-grab">
+                <div class="w-1 self-stretch bg-[#533afd] rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[14px] text-[#1c1e54] truncate">Toán</div>
+                  <div class="text-[12px] text-[#64748d] truncate">T. An · P.201</div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                  <div class="text-[13px] text-[#0d253d] tnum">6/8</div>
+                  <div class="flex gap-[2px]"><div class="w-3 h-1 bg-[#533afd] rounded-full"></div><div class="w-3 h-1 bg-[#533afd] rounded-full"></div><div class="w-3 h-1 bg-[#533afd] rounded-full"></div><div class="w-3 h-1 bg-[#e3e8ee] rounded-full"></div></div>
+                </div>
+              </div>
+              
+              <div class="flex items-center gap-3 px-3 py-2 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-grab opacity-50">
+                <div class="w-1 self-stretch bg-[#ea2261] rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[14px] text-[#0d253d] truncate">Ngữ văn</div>
+                  <div class="text-[12px] text-[#64748d] truncate">T. Hoa · P.201</div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                  <div class="text-[13px] text-[#0d253d] tnum">8/8</div>
+                  <div class="flex gap-[2px]"><div class="w-3 h-1 bg-[#ea2261] rounded-full"></div><div class="w-3 h-1 bg-[#ea2261] rounded-full"></div><div class="w-3 h-1 bg-[#ea2261] rounded-full"></div><div class="w-3 h-1 bg-[#ea2261] rounded-full"></div></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3 px-3 py-2 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-grab">
+                <div class="w-1 self-stretch bg-[#9b6829] rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[14px] text-[#0d253d] truncate">Tiếng Anh</div>
+                  <div class="text-[12px] text-[#64748d] truncate">T. Bình · Lab 1</div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                  <div class="text-[13px] text-[#0d253d] tnum">4/6</div>
+                  <div class="flex gap-[2px]"><div class="w-3 h-1 bg-[#9b6829] rounded-full"></div><div class="w-3 h-1 bg-[#9b6829] rounded-full"></div><div class="w-3 h-1 bg-[#e3e8ee] rounded-full"></div></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3 px-3 py-2 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-grab opacity-50">
+                <div class="w-1 self-stretch bg-[#665efd] rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[14px] text-[#1c1e54] truncate">KHTN - Sinh</div>
+                  <div class="text-[12px] text-[#64748d] truncate">T. Chi · P.201</div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                  <div class="text-[13px] text-[#0d253d] tnum">4/4</div>
+                  <div class="flex gap-[2px]"><div class="w-3 h-1 bg-[#665efd] rounded-full"></div><div class="w-3 h-1 bg-[#665efd] rounded-full"></div></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3 px-3 py-2 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-grab">
+                <div class="w-1 self-stretch bg-[#665efd] rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[14px] text-[#1c1e54] truncate">KHTN - Hóa</div>
+                  <div class="text-[12px] text-[#64748d] truncate">T. Chi · P.201</div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                  <div class="text-[13px] text-[#0d253d] tnum">2/4</div>
+                  <div class="flex gap-[2px]"><div class="w-3 h-1 bg-[#665efd] rounded-full"></div><div class="w-3 h-1 bg-[#e3e8ee] rounded-full"></div></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3 px-3 py-2 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-grab opacity-50">
+                <div class="w-1 self-stretch bg-[#273951] rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[14px] text-[#0d253d] truncate">Lịch sử</div>
+                  <div class="text-[12px] text-[#64748d] truncate">T. Lan · P.201</div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                  <div class="text-[13px] text-[#0d253d] tnum">2/2</div>
+                  <div class="flex gap-[2px]"><div class="w-3 h-1 bg-[#273951] rounded-full"></div></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3 px-3 py-2 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-grab">
+                <div class="w-1 self-stretch bg-[#273951] rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[14px] text-[#0d253d] truncate">Địa lý</div>
+                  <div class="text-[12px] text-[#64748d] truncate">T. Lan · P.201</div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                  <div class="text-[13px] text-[#0d253d] tnum">0/2</div>
+                  <div class="flex gap-[2px]"><div class="w-3 h-1 bg-[#e3e8ee] rounded-full"></div></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3 px-3 py-2 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-grab opacity-50">
+                <div class="w-1 self-stretch bg-[#273951] rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[14px] text-[#0d253d] truncate">GDCD</div>
+                  <div class="text-[12px] text-[#64748d] truncate">T. Hùng · P.201</div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                  <div class="text-[13px] text-[#0d253d] tnum">2/2</div>
+                  <div class="flex gap-[2px]"><div class="w-3 h-1 bg-[#273951] rounded-full"></div></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3 px-3 py-2 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-grab">
+                <div class="w-1 self-stretch bg-[#273951] rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[14px] text-[#0d253d] truncate">Công nghệ</div>
+                  <div class="text-[12px] text-[#64748d] truncate">T. Phương · P.201</div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                  <div class="text-[13px] text-[#0d253d] tnum">2/4</div>
+                  <div class="flex gap-[2px]"><div class="w-3 h-1 bg-[#273951] rounded-full"></div><div class="w-3 h-1 bg-[#e3e8ee] rounded-full"></div></div>
+                </div>
+              </div>
+
+               <div class="flex items-center gap-3 px-3 py-2 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-grab opacity-50">
+                <div class="w-1 self-stretch bg-[#273951] rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[14px] text-[#0d253d] truncate">Tin học</div>
+                  <div class="text-[12px] text-[#64748d] truncate">T. Dũng · P.Máy</div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                  <div class="text-[13px] text-[#0d253d] tnum">2/2</div>
+                  <div class="flex gap-[2px]"><div class="w-3 h-1 bg-[#273951] rounded-full"></div></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3 px-3 py-2 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-grab">
+                <div class="w-1 self-stretch bg-[#273951] rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[14px] text-[#0d253d] truncate">Thể dục</div>
+                  <div class="text-[12px] text-[#64748d] truncate">T. Tài · Sân 1</div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                  <div class="text-[13px] text-[#0d253d] tnum">2/4</div>
+                  <div class="flex gap-[2px]"><div class="w-3 h-1 bg-[#273951] rounded-full"></div><div class="w-3 h-1 bg-[#e3e8ee] rounded-full"></div></div>
+                </div>
+              </div>
+
+               <div class="flex items-center gap-3 px-3 py-2 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-grab opacity-50">
+                <div class="w-1 self-stretch bg-[#273951] rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[14px] text-[#0d253d] truncate">Âm nhạc</div>
+                  <div class="text-[12px] text-[#64748d] truncate">T. My · P.Nhạc</div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                  <div class="text-[13px] text-[#0d253d] tnum">2/2</div>
+                  <div class="flex gap-[2px]"><div class="w-3 h-1 bg-[#273951] rounded-full"></div></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3 px-3 py-2 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-grab">
+                <div class="w-1 self-stretch bg-[#273951] rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[14px] text-[#0d253d] truncate">Mỹ thuật</div>
+                  <div class="text-[12px] text-[#64748d] truncate">T. Hà · P.Họa</div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                  <div class="text-[13px] text-[#0d253d] tnum">0/2</div>
+                  <div class="flex gap-[2px]"><div class="w-3 h-1 bg-[#e3e8ee] rounded-full"></div></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3 px-3 py-2 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-grab opacity-50">
+                <div class="w-1 self-stretch bg-[#273951] rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[14px] text-[#0d253d] truncate">SH lớp</div>
+                  <div class="text-[12px] text-[#64748d] truncate">T. Hoa · P.201</div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                  <div class="text-[13px] text-[#0d253d] tnum">1/1</div>
+                  <div class="flex gap-[2px]"><div class="w-2 h-1 bg-[#273951] rounded-full"></div></div>
+                </div>
+              </div>
+              
+              <div class="flex items-center gap-3 px-3 py-2 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-grab opacity-50">
+                <div class="w-1 self-stretch bg-[#273951] rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[14px] text-[#0d253d] truncate">GDPC</div>
+                  <div class="text-[12px] text-[#64748d] truncate">T. Hoa · P.201</div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                  <div class="text-[13px] text-[#0d253d] tnum">1/1</div>
+                  <div class="flex gap-[2px]"><div class="w-2 h-1 bg-[#273951] rounded-full"></div></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="p-3 bg-[#f6f9fc] border-t border-[#e3e8ee] mt-auto shrink-0">
+               <button type="button" class="w-full px-4 py-2 rounded-full text-[14px] font-normal border border-[#533afd] bg-[#533afd] text-white hover:bg-[#4434d4] flex items-center justify-center gap-1">
+                Add card <iconify-icon icon="lucide:arrow-right" class="text-sm"></iconify-icon>
+              </button>
+            </div>
+          </aside>
+
+          <!-- Center Column: Grid -->
+          <div class="flex-1 min-w-0 min-h-0 overflow-y-auto custom-scrollbar">
+            
+            <!-- Timetable Grid -->
+            <section class="min-w-0" aria-label="Timetable grid">
+              <div class="grid p-3 pr-4 pb-4 bg-white border border-[#e3e8ee] rounded-xl shadow-[0_1px_3px_rgba(0,55,112,0.08)]" style="grid-template-columns: 60px repeat(5, minmax(0, 1fr)); gap: 1px;" role="table">
+                
+                <!-- Header Row -->
+                <div class="contents" role="row">
+                  <div class="border-b border-[#e3e8ee]" role="columnheader" aria-label="Time"></div>
+                  <div class="py-2 border-b border-[#e3e8ee] text-center" role="columnheader">
+                    <div class="text-[13px] font-normal text-[#273951]">Monday</div>
+                    <div class="text-[10px] text-[#64748d]">Th2</div>
+                  </div>
+                  <div class="py-2 border-b border-[#e3e8ee] text-center" role="columnheader">
+                    <div class="text-[13px] font-normal text-[#273951]">Tuesday</div>
+                    <div class="text-[10px] text-[#64748d]">Th3</div>
+                  </div>
+                  <div class="py-2 border-b border-[#e3e8ee] text-center" role="columnheader">
+                    <div class="text-[13px] font-normal text-[#273951]">Wednesday</div>
+                    <div class="text-[10px] text-[#64748d]">Th4</div>
+                  </div>
+                  <div class="py-2 border-b border-[#e3e8ee] text-center" role="columnheader">
+                    <div class="text-[13px] font-normal text-[#273951]">Thursday</div>
+                    <div class="text-[10px] text-[#64748d]">Th5</div>
+                  </div>
+                  <div class="py-2 border-b border-[#e3e8ee] text-center" role="columnheader">
+                    <div class="text-[13px] font-normal text-[#273951]">Friday</div>
+                    <div class="text-[10px] text-[#64748d]">Th6</div>
+                  </div>
+                </div>
+
+                <!-- Block 1-2 -->
+                <div class="contents" role="row">
+                  <div class="flex flex-col justify-center gap-[2px] pr-2 border-b border-[#f6f9fc]" role="rowheader">
+                    <span class="text-[14px] text-[#0d253d] tnum font-normal text-right">1-2</span>
+                    <span class="text-[10px] font-normal text-[#64748d] tnum text-right">08:00</span>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#eeecfe] shadow-[inset_3px_0_0_#533afd] text-[#1c1e54]">
+                      <div class="text-[14px] truncate">Toán</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. An</span>
+                        <span>P.201</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#fdeef5] shadow-[inset_3px_0_0_#ea2261] text-[#0d253d]">
+                      <div class="text-[14px] truncate">Ngữ văn</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. Hoa</span>
+                        <span>P.201</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#f7edda] shadow-[inset_3px_0_0_#9b6829] text-[#0d253d]">
+                      <div class="text-[14px] truncate">Tiếng Anh</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. Bình</span>
+                        <span>Lab 1</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#eeecfe] shadow-[inset_3px_0_0_#533afd] text-[#1c1e54]">
+                      <div class="text-[14px] truncate">Toán</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. An</span>
+                        <span>P.201</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#fdeef5] shadow-[inset_3px_0_0_#ea2261] text-[#0d253d]">
+                      <div class="text-[14px] truncate">Ngữ văn</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. Hoa</span>
+                        <span>P.201</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Break -->
+                <div class="contents" role="row">
+                  <div class="col-[2/-1] flex items-center justify-center gap-2 text-[9px] font-normal tracking-[0.1px] uppercase text-[#8fa2bb] py-1" role="cell">
+                    <div class="flex-1 border-t border-[#f6f9fc]"></div>
+                    <span>Break</span>
+                    <span class="tnum">09:10–09:20</span>
+                    <div class="flex-1 border-t border-[#f6f9fc]"></div>
+                  </div>
+                </div>
+
+                <!-- Block 3-4 -->
+                <div class="contents" role="row">
+                  <div class="flex flex-col justify-center gap-[2px] pr-2 border-b border-[#f6f9fc]" role="rowheader">
+                    <span class="text-[14px] text-[#0d253d] tnum font-normal text-right">3-4</span>
+                    <span class="text-[10px] font-normal text-[#64748d] tnum text-right">09:20</span>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                     <!-- Error Slot -->
+                    <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#eeecfe] shadow-[inset_3px_0_0_#533afd] text-[#1c1e54] border border-[#ea2261] relative">
+                      <div class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#ea2261] border-2 border-white"></div>
+                      <div class="text-[14px] truncate">Toán</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. An</span>
+                        <span>P.201</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#eef2f7] shadow-[inset_3px_0_0_#273951] text-[#0d253d]">
+                      <div class="text-[14px] truncate">Lịch sử</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. Lan</span>
+                        <span>P.201</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <!-- Warning Slot (implicit, involved in 'placed twice on Tuesday') -->
+                    <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#eeecfe] shadow-[inset_3px_0_0_#533afd] text-[#1c1e54] border border-[#f7edda]">
+                      <div class="text-[14px] truncate">Toán</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. An</span>
+                        <span>P.201</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <div class="flex flex-col gap-1 h-full">
+                      <div class="flex items-center gap-2 h-1/2 px-2 rounded-[6px] bg-[#eef2f7] shadow-[inset_3px_0_0_#273951] text-[#0d253d]">
+                        <div class="text-[13px] truncate flex-1 max-w-[50%]">SH lớp</div>
+                        <div class="flex justify-end gap-1 text-[11px] opacity-80 flex-1 truncate">
+                          <span>T. Hoa</span>
+                        </div>
+                      </div>
+                      <div class="flex items-center gap-2 h-1/2 px-2 rounded-[6px] bg-[#eef2f7] shadow-[inset_3px_0_0_#273951] text-[#0d253d]">
+                        <div class="text-[13px] truncate flex-1 max-w-[50%]">GDPC</div>
+                        <div class="flex justify-end gap-1 text-[11px] opacity-80 flex-1 truncate">
+                          <span>T. Hoa</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                     <div class="h-full rounded-[8px] border border-dashed border-[#a8c3de] bg-[#f6f9fc] flex items-center justify-center text-[#533afd] hover:bg-white hover:border-[#b9b9f9] cursor-pointer transition-colors">
+                        <iconify-icon icon="lucide:plus"></iconify-icon>
+                     </div>
+                  </div>
+                </div>
+
+                <!-- Break -->
+                <div class="contents" role="row">
+                  <div class="col-[2/-1] flex items-center justify-center gap-2 text-[9px] font-normal tracking-[0.1px] uppercase text-[#8fa2bb] py-1" role="cell">
+                    <div class="flex-1 border-t border-[#f6f9fc]"></div>
+                    <span>Break</span>
+                    <span class="tnum">10:30–10:40</span>
+                    <div class="flex-1 border-t border-[#f6f9fc]"></div>
+                  </div>
+                </div>
+
+                <!-- Block 5-6 -->
+                <div class="contents" role="row">
+                  <div class="flex flex-col justify-center gap-[2px] pr-2 border-b border-[#f6f9fc]" role="rowheader">
+                    <span class="text-[14px] text-[#0d253d] tnum font-normal text-right">5-6</span>
+                    <span class="text-[10px] font-normal text-[#64748d] tnum text-right">10:40</span>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#f1f0fe] shadow-[inset_3px_0_0_#665efd] text-[#1c1e54]">
+                      <div class="text-[14px] truncate">KHTN - Sinh</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. Chi</span>
+                        <span>P.201</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#fdeef5] shadow-[inset_3px_0_0_#ea2261] text-[#0d253d]">
+                      <div class="text-[14px] truncate">Ngữ văn</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. Hoa</span>
+                        <span>P.201</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#f1f0fe] shadow-[inset_3px_0_0_#665efd] text-[#1c1e54]">
+                      <div class="text-[14px] truncate">KHTN - Sinh</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. Chi</span>
+                        <span>P.201</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#f7edda] shadow-[inset_3px_0_0_#9b6829] text-[#0d253d]">
+                      <div class="text-[14px] truncate">Tiếng Anh</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. Bình</span>
+                        <span>Lab 1</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <div class="h-full rounded-[8px] border border-dashed border-[#a8c3de] bg-[#f6f9fc] hover:bg-white hover:border-[#b9b9f9] transition-colors"></div>
+                  </div>
+                </div>
+
+                <!-- Lunch (Long Break) -->
+                <div class="contents" role="row">
+                  <div class="col-[2/-1] flex items-center justify-center gap-2 text-[10px] font-normal tracking-[0.1px] uppercase py-1 mt-1 mb-1 rounded-[4px] bg-[#f5e9d4] text-[#9b6829]" role="cell">
+                    <span>Lunch</span>
+                    <span class="tnum">11:50–13:20</span>
+                  </div>
+                </div>
+
+                <!-- Block 7-8 -->
+                <div class="contents" role="row">
+                  <div class="flex flex-col justify-center gap-[2px] pr-2 border-b border-[#f6f9fc]" role="rowheader">
+                    <span class="text-[14px] text-[#0d253d] tnum font-normal text-right">7-8</span>
+                    <span class="text-[10px] font-normal text-[#64748d] tnum text-right">13:20</span>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#f7edda] shadow-[inset_3px_0_0_#9b6829] text-[#0d253d]">
+                      <div class="text-[14px] truncate">Tiếng Anh</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. Bình</span>
+                        <span>Lab 1</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                     <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#eef2f7] shadow-[inset_3px_0_0_#273951] text-[#0d253d]">
+                      <div class="text-[14px] truncate">Công nghệ</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. Phương</span>
+                        <span>P.201</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <div class="h-full rounded-[8px] border border-dashed border-[#a8c3de] bg-[#f6f9fc] hover:bg-white hover:border-[#b9b9f9] transition-colors"></div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#eef2f7] shadow-[inset_3px_0_0_#273951] text-[#0d253d]">
+                      <div class="text-[14px] truncate">GDCD</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. Hùng</span>
+                        <span>P.201</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-b border-[#f6f9fc] border-l border-[#f6f9fc]" role="cell">
+                    <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#eef2f7] shadow-[inset_3px_0_0_#273951] text-[#0d253d]">
+                      <div class="text-[14px] truncate">Thể dục</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. Tài</span>
+                        <span>Sân 1</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Break -->
+                <div class="contents" role="row">
+                  <div class="col-[2/-1] flex items-center justify-center gap-2 text-[9px] font-normal tracking-[0.1px] uppercase text-[#8fa2bb] py-1" role="cell">
+                    <div class="flex-1 border-t border-[#f6f9fc]"></div>
+                    <span>Snack</span>
+                    <span class="tnum">14:30–14:50</span>
+                    <div class="flex-1 border-t border-[#f6f9fc]"></div>
+                  </div>
+                </div>
+
+                <!-- Block 9-10 -->
+                <div class="contents" role="row">
+                  <div class="flex flex-col justify-center gap-[2px] pr-2" role="rowheader">
+                    <span class="text-[14px] text-[#0d253d] tnum font-normal text-right">9-10</span>
+                    <span class="text-[10px] font-normal text-[#64748d] tnum text-right">14:50</span>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-l border-[#f6f9fc]" role="cell">
+                     <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#eef2f7] shadow-[inset_3px_0_0_#273951] text-[#0d253d]">
+                      <div class="text-[14px] truncate">Tin học</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. Dũng</span>
+                        <span>P.Máy</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-l border-[#f6f9fc]" role="cell">
+                    <div class="h-full rounded-[8px] border border-dashed border-[#a8c3de] bg-[#f6f9fc] hover:bg-white hover:border-[#b9b9f9] transition-colors"></div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-l border-[#f6f9fc]" role="cell">
+                    <div class="h-full rounded-[8px] border border-dashed border-[#a8c3de] bg-[#f6f9fc] hover:bg-white hover:border-[#b9b9f9] transition-colors"></div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-l border-[#f6f9fc]" role="cell">
+                     <div class="flex flex-col justify-between h-full p-2 rounded-[8px] bg-[#eef2f7] shadow-[inset_3px_0_0_#273951] text-[#0d253d]">
+                      <div class="text-[14px] truncate">Âm nhạc</div>
+                      <div class="flex justify-between text-[12px] opacity-80">
+                        <span>T. My</span>
+                        <span>P.Nhạc</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="h-[clamp(80px,calc((100vh_-_420px)/5),140px)] p-1 border-l border-[#f6f9fc]" role="cell">
+                    <div class="h-full rounded-[8px] border border-dashed border-[#a8c3de] bg-[#f6f9fc] flex items-center justify-center text-[#533afd] hover:bg-white hover:border-[#b9b9f9] cursor-pointer transition-colors">
+                        <iconify-icon icon="lucide:plus"></iconify-icon>
+                     </div>
+                  </div>
+                </div>
+
+              </div>
+            </section>
+
+
+
+          </div>
+
+          <!-- Right Issues Panel -->
+          <aside class="w-[320px] shrink-0 flex flex-col bg-white border border-[#e3e8ee] rounded-xl shadow-[0_1px_3px_rgba(0,55,112,0.08)] overflow-hidden h-full min-h-0" aria-label="Issues">
+            <div class="px-4 py-3 border-b border-[#e3e8ee] bg-[#f6f9fc] shrink-0 flex flex-col gap-3">
+              <div class="flex items-center justify-between">
+                <h2 class="text-[14px] font-normal m-0 text-[#0d253d]">Issues</h2>
+                <div class="flex gap-2">
+                  <span class="px-2 py-0.5 rounded-full bg-[#fdeef5] text-[12px] font-normal text-[#ea2261] tnum">Errors 2</span>
+                  <span class="px-2 py-0.5 rounded-full bg-[#f7edda] text-[12px] font-normal text-[#9b6829] tnum">Warnings 3</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-1 bg-[#e3e8ee] p-0.5 rounded-full self-start">
+                <button class="px-3 py-1 rounded-full text-[12px] font-normal bg-white text-[#0d253d] shadow-[0_1px_2px_rgba(0,55,112,0.08)]">All</button>
+                <button class="px-3 py-1 rounded-full text-[12px] font-normal text-[#64748d] hover:text-[#0d253d]">Errors</button>
+                <button class="px-3 py-1 rounded-full text-[12px] font-normal text-[#64748d] hover:text-[#0d253d]">Warnings</button>
+              </div>
+            </div>
+            <div class="flex flex-col overflow-y-auto custom-scrollbar flex-1">
+              <div class="flex items-start gap-3 px-4 py-3 border-b border-[#e3e8ee] bg-[#fdeef5] shadow-[inset_3px_0_0_#ea2261]">
+                <div class="w-2 h-2 rounded-full bg-[#ea2261] mt-[6px] shrink-0"></div>
+                <div>
+                  <div class="text-[14px] text-[#0d253d] mb-1">T. An teaches 6A1 and 7B1 at the same time</div>
+                  <div class="text-[12px] text-[#64748d] tnum">Monday 3-4 · 6A1, 7B1</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 px-4 py-3 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-pointer">
+                <div class="w-2 h-2 rounded-full bg-[#ea2261] mt-[6px] shrink-0"></div>
+                <div>
+                  <div class="text-[14px] text-[#0d253d] mb-1">Room P.201 is used by 6A1 and 6A2</div>
+                  <div class="text-[12px] text-[#64748d] tnum">Wednesday 5-6 · 6A1, 6A2</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 px-4 py-3 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-pointer">
+                <div class="w-2 h-2 rounded-full bg-[#9b6829] mt-[6px] shrink-0"></div>
+                <div>
+                  <div class="text-[14px] text-[#0d253d] mb-1">Toán is placed twice on Tuesday</div>
+                  <div class="text-[12px] text-[#64748d] tnum">Tuesday 1-2, Tuesday 3-4</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 px-4 py-3 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-pointer">
+                <div class="w-2 h-2 rounded-full bg-[#9b6829] mt-[6px] shrink-0"></div>
+                <div>
+                  <div class="text-[14px] text-[#0d253d] mb-1">Tiếng Anh is placed twice on Friday</div>
+                  <div class="text-[12px] text-[#64748d] tnum">Friday 3-4, Friday 7-8</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 px-4 py-3 border-b border-[#e3e8ee] hover:bg-[#f6f9fc] cursor-pointer">
+                <div class="w-2 h-2 rounded-full bg-[#9b6829] mt-[6px] shrink-0"></div>
+                <div>
+                  <div class="text-[14px] text-[#0d253d] mb-1">Tin học has 6 periods placed, card has 4</div>
+                  <div class="text-[12px] text-[#64748d] tnum">Monday 9-10, Thursday 1-2, Friday 5-6</div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</body>
+</html>

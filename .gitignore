@@ -1,0 +1,28 @@
+# Dependencies and build output
+node_modules/
+out/
+dist/
+
+# Test output
+test-results/
+playwright-report/
+coverage/
+
+# The school's real workbook holds staff names, phones, and emails: never commit it,
+# or any other workbook (tests build their own made-up ones in memory). The one
+# exception is the anonymized copy in samples/.
+*.xlsx
+*.xls
+*.xlsm
+~$*
+!samples/TKB_THCS_sample.xlsx
+
+# Local settings and editor files
+.claude/settings.local.json
+.env
+.env.*
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log

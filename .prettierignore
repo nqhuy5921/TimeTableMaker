@@ -1,0 +1,11 @@
+out/
+dist/
+node_modules/
+playwright-report/
+test-results/
+package-lock.json
+*.xlsx
+*.md
+.superdesign/
+docs/design/*.html
+.claude/

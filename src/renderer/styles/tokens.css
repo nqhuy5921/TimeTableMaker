@@ -1,0 +1,149 @@
+/* Design tokens from docs/design/DESIGN_SYSTEM.md and
+   docs/design/TIMETABLE_SCREEN_LAYOUT.md. Every color, space, radius, and
+   shadow in the app comes from here; components never use literal hex values. */
+
+:root {
+  /* Colors */
+  --primary: #533afd;
+  --primary-deep: #4434d4;
+  --primary-press: #2e2b8c;
+  --primary-soft: #665efd;
+  --primary-subdued: #b9b9f9; /* drop preview only */
+  --hover-tint: color-mix(in srgb, var(--primary) 10%, #ffffff);
+
+  --ink: #0d253d;
+  --ink-secondary: #273951;
+  --ink-mute: #64748d;
+  --on-primary: #ffffff;
+
+  --canvas: #ffffff;
+  --canvas-soft: #f6f9fc;
+  --canvas-cream: #f5e9d4;
+  --hairline: #e3e8ee;
+  --hairline-input: #a8c3de;
+
+  --danger: #ea2261;
+  --danger-bg: #fdeef5;
+  --warning-ink: #9b6829;
+  --warning-bg: #f7edda;
+
+  /* Header: the app header and the grid's day header always share this color. */
+  --header-bg: #6a3cbf;
+  --header-divider: color-mix(in srgb, var(--header-bg) 75%, #ffffff);
+  --header-hover: color-mix(in srgb, var(--header-bg) 85%, #000000);
+  --header-ink-mute: rgba(255, 255, 255, 0.72);
+  --header-highlight: rgba(255, 255, 255, 0.16);
+
+  /* Grid and panel lines */
+  --line-strong: #c9d3de; /* panel and grid container borders */
+  --line-grid: #dde3ea; /* grid cell borders */
+
+  --lunch-bg: #fbf1dc;
+  --lunch-ink: #6b4608;
+  --break-bg: #eef1f5;
+
+  /* Behind a modal dialog */
+  --backdrop: rgba(13, 37, 61, 0.32);
+
+  /* Subject palettes (tint, bar, ink), indexed by Subject.colorKey */
+  --subject-math-bg: #e6effc;
+  --subject-math-bar: #3b6fd4;
+  --subject-math-ink: #1b3c7a;
+  --subject-literature-bg: #fbe9ee;
+  --subject-literature-bar: #d0466b;
+  --subject-literature-ink: #7a1f3a;
+  --subject-english-bg: #fbf1dc;
+  --subject-english-bar: #c98a1a;
+  --subject-english-ink: #6b4608;
+  --subject-biology-bg: #e5f4ea;
+  --subject-biology-bar: #3a9a5b;
+  --subject-biology-ink: #1d5532;
+  --subject-chemistry-bg: #e2f3f3;
+  --subject-chemistry-bar: #2a9393;
+  --subject-chemistry-ink: #12504f;
+  --subject-physics-bg: #ecebfd;
+  --subject-physics-bar: #5b52e0;
+  --subject-physics-ink: #2b2580;
+  --subject-history-bg: #f8ebe2;
+  --subject-history-bar: #b8693a;
+  --subject-history-ink: #5e3216;
+  --subject-geography-bg: #eef2df;
+  --subject-geography-bar: #7f9330;
+  --subject-geography-ink: #414d14;
+  --subject-civics-bg: #eaeef3;
+  --subject-civics-bar: #5d7290;
+  --subject-civics-ink: #2a3a52;
+  --subject-technology-bg: #e2f1f8;
+  --subject-technology-bar: #2f8bb8;
+  --subject-technology-ink: #134a66;
+  --subject-informatics-bg: #f2e9fb;
+  --subject-informatics-bar: #9351d4;
+  --subject-informatics-ink: #4b2275;
+  --subject-pe-bg: #e8f5e1;
+  --subject-pe-bar: #5c9e2e;
+  --subject-pe-ink: #2e5414;
+  --subject-music-bg: #fbe8f6;
+  --subject-music-bar: #c2459e;
+  --subject-music-ink: #64184f;
+  --subject-art-bg: #fdece6;
+  --subject-art-bar: #e06a45;
+  --subject-art-ink: #752e17;
+  --subject-homeroom-bg: #eef0f2;
+  --subject-homeroom-bar: #7c8794;
+  --subject-homeroom-ink: #364250;
+
+  /* Typography */
+  --font-sans: 'Lexend', system-ui, sans-serif;
+  --text-display-lg: 32px;
+  --text-display-md: 26px;
+  --text-heading-sm: 18px;
+  --text-body: 15px;
+  --text-tabular: 14px;
+  --text-button-md: 16px;
+  --text-table-head: 16px; /* table column headings (DESIGN_SYSTEM.md, Tables) */
+  --text-button-sm: 14px;
+  --text-caption: 13px;
+  --text-small: 12px;
+  --text-break: 11px;
+  --text-micro-cap: 10px;
+
+  /* Spacing */
+  --space-xxs: 2px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-xxl: 32px;
+  --chip-padding: 6px 13px; /* filter-chip size (DESIGN_SYSTEM.md, Pill tags/chips) */
+  --badge-padding: 0 5px; /* class tile issue counts (layout spec, Class bar) */
+  --badge-ring: 0 0 0 2px var(--canvas); /* parts a class tile's count badge from the tile */
+  --dot-size: 8px; /* error and warning dots */
+  --dot-gap: 6px; /* between a dot and its words */
+  --icon-sm: 14px; /* small line icons, such as a dropdown's chevron */
+  --select-chevron-room: calc(
+    var(--space-md) + var(--icon-sm) + var(--space-sm)
+  ); /* a dropdown's text stops here, clear of its chevron */
+  --issue-row-padding: 10px 12px; /* Issues tab rows (layout spec, Issues tab) */
+  --menu-item-inline: 10px; /* a menu's items and headings, side padding (DESIGN_SYSTEM.md, Menu items) */
+  --issue-dot-top: 5px; /* lines an issue row's dot up with its first line */
+  --spotlight-dim: 0.45; /* other cards while an issue is selected */
+
+  /* The side panel's thin scrollbar */
+  --scrollbar-width: 8px;
+
+  /* Radius */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-panel: 10px;
+  --radius-lg: 12px;
+  --radius-pill: 9999px;
+
+  /* The app header's height; the save notice drops down just under it. */
+  --header-height: 56px;
+
+  /* Elevation */
+  --shadow-1: rgba(0, 55, 112, 0.08) 0 1px 3px;
+  --shadow-2: rgba(0, 55, 112, 0.08) 0 8px 24px, rgba(0, 55, 112, 0.04) 0 2px 6px;
+}

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "targets": {
+    "timetable-screen": {
+      "targetKind": "existing-ui",
+      "projectId": "81a12f44-8a59-4030-9c37-6435476119c7",
+      "baselineDraftId": "7d820982-f1ab-4144-b0e0-565ac889652b",
+      "activeDraftId": "829a8702-c46a-4873-a2ab-4bd114ea3d0a",
+      "designSystemPath": ".superdesign/design-system.md",
+      "contextFiles": [
+        ".superdesign/design-system.md",
+        "src/renderer/App.tsx",
+        "src/renderer/components/TopBar.tsx",
+        "src/renderer/screens/TimetableScreen.tsx",
+        "src/domain/bellSchedule.ts",
+        "src/domain/model.ts",
+        "src/renderer/styles/tokens.css",
+        "src/renderer/styles/base.css",
+        "src/renderer/styles/app.css"
+      ],
+      "fingerprints": {
+        ".superdesign/design-system.md": "5d83289748df7a3bf13a188d19202ee06b91ab1b8f286af4a10cd80cf9c9160d",
+        "src/renderer/App.tsx": "f641fbe5624923a7ec8fc7a479473db86c279f81848eefd01b007d0c31daeef8",
+        "src/renderer/components/TopBar.tsx": "1d95021f05079ca701673ae6f6328303bc023377167b15a941bcc73e41ae499a",
+        "src/renderer/screens/TimetableScreen.tsx": "2f8f98b9f520994b60332b4b64762d8886ea83127d02677b7c288540b3d53ae4",
+        "src/domain/bellSchedule.ts": "5477a5e4731aca904dc8fd04ad9be94ec869b8a73635206ce5cb15f8f12dc575",
+        "src/domain/model.ts": "389f030a9fafaa59bddbd873a301e0830ab31ca8085860bb601cb05d9641dc6c",
+        "src/renderer/styles/tokens.css": "03609ae6362a5b1577414b0f3e23f72fb98fce16f3c37a5de2e5af4d68bedcaa",
+        "src/renderer/styles/base.css": "646ff951a6819d51ce8f9b3c3a3e2d1bc62d809fc6b39f298822f57313af4de8",
+        "src/renderer/styles/app.css": "5c3db8c2ff1854613f95bdf2ebeb8755a202065a008f7f5ab48f73119f8095e3"
+      },
+      "components": [
+        {
+          "name": "TopBar",
+          "id": "b2147a35-1b1c-4259-8a77-66f6e9bb3ef4",
+          "sourcePath": "src/renderer/components/TopBar.tsx"
+        }
+      ],
+      "drafts": {
+        "7d820982-f1ab-4144-b0e0-565ac889652b": {
+          "title": "Current Timetable screen (reproduction)",
+          "visualDirection": "faithful copy of current UI, empty state",
+          "currentVersion": 1
+        },
+        "44d5c581-8d26-491f-99e4-d2a016855088": {
+          "title": "Timetable Guided Workbench",
+          "visualDirection": "A: grade tabs + class chips with progress, summary card, To place / Done card sections, drag and clash states",
+          "parentDraftId": "7d820982-f1ab-4144-b0e0-565ac889652b",
+          "currentVersion": 1
+        },
+        "829a8702-c46a-4873-a2ab-4bd114ea3d0a": {
+          "title": "TimeTableMaker - Expanded Timetable & Issues",
+          "visualDirection": "selected: B calm/compact + A grade tabs and class chips; full-width three columns Cards | grid | Issues (right); slot height follows window",
+          "parentDraftId": "7d820982-f1ab-4144-b0e0-565ac889652b",
+          "currentVersion": 4
+        }
+      },
+      "updatedAt": "2026-10-16T03:12:59.155101+00:00"
+    }
+  }
+}

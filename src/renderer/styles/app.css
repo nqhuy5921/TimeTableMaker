@@ -1,0 +1,2766 @@
+/* Shell: header across the top, the screen below it. */
+.shell {
+  display: grid;
+  grid-template-rows: var(--header-height) minmax(0, 1fr);
+  height: 100%;
+}
+
+.shell-main {
+  /* The page itself never scrolls: a save error and the screen share the height, and
+     each screen scrolls inside its own regions (the side panel, the grid, the Cards
+     table). A page scrollbar would push everything left when it came and went
+     (asked 2026-10-21). */
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.shell-main > * {
+  flex-shrink: 0;
+}
+
+/* App header */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xxl);
+  padding: 0 var(--space-xl);
+  background: var(--header-bg);
+  color: var(--on-primary);
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-heading-sm);
+  font-weight: 400;
+}
+
+/* The brand and the profile pill (PF-2) take a fixed width, so the menu links never move
+   with the profile's name. */
+.topbar-start {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-lg);
+  width: 400px;
+}
+
+/* The open profile's name (release 4, layout spec "Profile pill"): white at about 15% over
+   the header, at most 200px wide, the active white pill while the profile screen is open. */
+.topbar-profile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-width: 0;
+  max-width: 200px;
+  padding: var(--space-sm) var(--space-lg);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--header-highlight);
+  font: inherit;
+  font-size: var(--text-caption);
+  font-weight: 400;
+  color: var(--on-primary);
+  cursor: pointer;
+  transition:
+    background-color 120ms,
+    color 120ms;
+}
+
+.topbar-profile:hover {
+  background: var(--header-hover);
+}
+
+.topbar-profile[aria-current='page'] {
+  background: var(--canvas);
+  color: var(--header-bg);
+}
+
+.topbar-profile:focus-visible {
+  outline: 2px solid var(--on-primary);
+  outline-offset: 2px;
+}
+
+.topbar-profile-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.topbar-profile svg {
+  flex: none;
+}
+
+.topbar-mark {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-sm);
+  background:
+    linear-gradient(var(--header-bg), var(--header-bg)) 50% 0 / 2px 100% no-repeat,
+    linear-gradient(var(--header-bg), var(--header-bg)) 0 50% / 100% 2px no-repeat,
+    var(--canvas);
+}
+
+.topbar-links {
+  display: flex;
+  gap: var(--space-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Menu links are pills: white text on the header, the active one a white pill. */
+.topbar-link {
+  padding: var(--space-sm) var(--space-lg);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  font: inherit;
+  font-size: var(--text-button-sm);
+  color: var(--header-ink-mute);
+  cursor: pointer;
+  transition:
+    background-color 120ms,
+    color 120ms;
+}
+
+.topbar-link:hover {
+  background: var(--header-highlight);
+  color: var(--on-primary);
+}
+
+.topbar-link[aria-current='page'] {
+  background: var(--canvas);
+  color: var(--header-bg);
+  font-weight: 400;
+}
+
+/* Each link is as wide as its label at the active link's weight, so the menu doesn't
+   shift when the active link changes (asked 2026-10-21). The copy is hidden, takes no
+   height, and adds nothing to the link's name ("/ ''"). */
+.topbar-link-label {
+  display: inline-grid;
+}
+
+.topbar-link-label::after {
+  content: attr(data-label) / '';
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: 400;
+}
+
+.topbar-link:focus-visible {
+  outline: 2px solid var(--on-primary);
+  outline-offset: 2px;
+}
+
+.topbar-version {
+  margin-left: auto;
+  font-size: var(--text-caption);
+  color: var(--header-ink-mute);
+}
+
+/* Cards page (DM-7, layout spec screen 2d): a heading with the search and Add card,
+   then the card pool as one table. */
+.list-screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+.list-screen-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  min-width: 0;
+}
+
+.list-screen-head h1 {
+  letter-spacing: -0.64px;
+}
+
+.list-screen-head .caption {
+  margin-right: auto;
+  color: var(--ink-mute);
+}
+
+.cards-search {
+  width: 300px;
+}
+
+/* The grade and teacher filters (asked for 2026-10-21): a dropdown in a pill like the
+   search beside them, with the arrow drawn by the icon. The Issues tab's filters are the
+   same (FilterSelect.tsx). */
+.filter-select {
+  position: relative;
+}
+
+.list-screen-head .filter-select {
+  width: 160px;
+}
+
+.search-field.filter-select {
+  padding: 0;
+}
+
+.filter-select select {
+  padding: var(--space-sm) var(--select-chevron-room) var(--space-sm) var(--space-md);
+  border: 0;
+  border-radius: var(--radius-pill);
+  outline: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--text-caption);
+  color: var(--ink);
+  text-overflow: ellipsis;
+}
+
+/* The table scrolls inside its panel, under a header that stays put (2026-10-21), so the
+   page never gets a scrollbar. The scrollbar's room is always kept, so the columns don't
+   narrow when the search makes the table long enough to scroll. */
+.list-table-panel {
+  /* The header row's height, so the scrollbar's strip beside it can carry on its tint and
+     its bottom line instead of leaving a white notch. */
+  --cards-head-height: 52px;
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow: hidden auto;
+  scrollbar-gutter: stable;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-panel);
+  background: linear-gradient(
+      var(--canvas-soft) calc(var(--cards-head-height) - 1px),
+      var(--line-strong) 0 var(--cards-head-height),
+      var(--canvas) 0
+    )
+    no-repeat;
+}
+
+.list-table {
+  width: 100%;
+  border-collapse: collapse;
+  /* Fixed column widths, so the columns don't shift as the search narrows the rows. */
+  table-layout: fixed;
+  font-size: var(--text-tabular);
+}
+
+.list-table thead th:nth-child(4) {
+  width: 20%;
+}
+
+.list-table thead th:nth-child(5) {
+  width: 200px;
+}
+
+/* Larger than the design system's micro-cap table labels, at the user's request
+   (2026-10-20, made larger again 2026-10-21): 16px in the ink color, above the 14px
+   rows, with a firmer line under it. */
+.list-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: var(--cards-head-height);
+  padding: var(--space-lg) var(--space-xl);
+  /* A shadow rather than a border: collapsed borders don't stay with a sticky header. */
+  box-shadow: inset 0 -1px 0 var(--line-strong);
+  background: var(--canvas-soft);
+  color: var(--ink);
+  font-size: var(--text-table-head);
+  font-weight: 400;
+  text-align: left;
+}
+
+.list-table td,
+.list-table tbody th {
+  padding: var(--space-md) var(--space-xl);
+  border-top: 1px solid var(--hairline);
+  font-weight: 300;
+  text-align: left;
+}
+
+.list-table .subject-tag {
+  font-size: var(--text-tabular);
+  font-weight: 400;
+}
+
+.list-table-classes {
+  font-feature-settings: 'tnum';
+}
+
+.list-table-none {
+  color: var(--ink-mute);
+}
+
+.list-table .list-table-actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* The kept scrollbar room sits right of the last column, so its padding is cut by the
+   same width and the buttons keep their inset from the panel's edge. */
+.list-table th:last-child,
+.list-table td:last-child {
+  padding-right: calc(var(--space-xl) - var(--scrollbar-width));
+}
+
+.list-table-actions .btn + .btn {
+  margin-left: var(--space-sm);
+}
+
+/* Teachers page (DM-1, layout spec "Teachers page"): laid out like the Cards page, with
+   the teachers in one table. A row opens the teacher's detail screen. */
+.list-search {
+  width: 300px;
+}
+
+.teachers-table thead th:nth-child(1) {
+  width: 16%;
+}
+
+.teachers-table thead th:nth-child(4) {
+  width: 10%;
+}
+
+.teachers-table thead th:nth-child(5),
+.teachers-table thead th:nth-child(6) {
+  width: 8%;
+}
+
+.teachers-table thead th:nth-child(7) {
+  width: 11%;
+}
+
+.teachers-table thead th:nth-child(8) {
+  width: 8%;
+}
+
+/* The chevron column. */
+.teachers-table thead th:nth-child(9) {
+  width: 48px;
+}
+
+/* A teacher's current errors: a small pink pill (layout spec "Teachers page"). */
+.error-pill {
+  display: inline-block;
+  min-width: 20px;
+  padding: 0 var(--space-xs);
+  border-radius: var(--radius-pill);
+  background: var(--danger-bg);
+  color: var(--danger);
+  font-size: var(--text-small);
+  line-height: 20px;
+  text-align: center;
+}
+
+.teachers-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.teachers-table-row {
+  cursor: pointer;
+}
+
+.teachers-table-row:hover > * {
+  background: var(--canvas-soft);
+}
+
+.teachers-table-open {
+  max-width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 400;
+  color: var(--ink);
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.teachers-table-open:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* The 48px chevron column has no left padding, or the table's 24px cell padding would
+   leave the chevron no room. */
+.teachers-table .teachers-table-chevron,
+.teachers-table thead th:last-child {
+  padding-left: 0;
+}
+
+.teachers-table .teachers-table-chevron {
+  color: var(--ink-mute);
+  text-align: center;
+  text-overflow: clip;
+}
+
+.teachers-table-chevron svg {
+  vertical-align: middle;
+}
+
+/* The list pages' cells (ListPage.tsx): the item's name in weight 400, and numbers
+   right-aligned with tabular numbers. */
+.list-table .list-table-name {
+  font-weight: 400;
+}
+
+.list-table .list-table-number {
+  font-feature-settings: 'tnum';
+  text-align: right;
+}
+
+/* Profile screen (PF-2, layout spec "Profile screen"): Profile · Classes 10% · Cards 10% ·
+   Last changed 16% · Open, Duplicate, Rename, and Delete. The open profile's name has an
+   "Open now" chip at the filter-chip size. */
+.profiles-table thead th:nth-child(2),
+.profiles-table thead th:nth-child(3) {
+  width: 10%;
+}
+
+.profiles-table thead th:nth-child(4) {
+  width: 16%;
+}
+
+.profiles-table thead th:nth-child(5) {
+  width: 400px;
+}
+
+/* A long name is cut with an ellipsis before the chip, so the open one is always marked. */
+.profiles-table-name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+
+.profiles-table-name-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.open-chip {
+  flex: none;
+  white-space: nowrap;
+  padding: var(--chip-padding);
+  border-radius: var(--radius-pill);
+  background: var(--canvas-soft);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  color: var(--ink-secondary);
+}
+
+/* Classes page (DM-2, layout spec "List pages for classes, rooms, and subjects"): laid out
+   like the Teachers page, with Edit and Delete on each row as on the Cards page. Class 12%,
+   Grade 8%, the two teachers share what's left, Placed 10%, Errors 8%, actions 200px. */
+.classes-table thead th:nth-child(1) {
+  width: 12%;
+}
+
+.classes-table thead th:nth-child(2),
+.classes-table thead th:nth-child(6) {
+  width: 8%;
+}
+
+.classes-table thead th:nth-child(4) {
+  width: auto;
+}
+
+.classes-table thead th:nth-child(5) {
+  width: 10%;
+}
+
+.classes-table thead th:nth-child(7) {
+  width: 200px;
+}
+
+.classes-table .classes-table-grade {
+  font-feature-settings: 'tnum';
+}
+
+.classes-table-teacher {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Rooms page (DM-3, layout spec "List pages for classes, rooms, and subjects"): laid out
+   like the Classes page. The room takes what's left, Cards 10%, Classes 40%, actions 200px. */
+.rooms-table thead th:nth-child(2) {
+  width: 10%;
+}
+
+.rooms-table thead th:nth-child(3) {
+  width: 40%;
+}
+
+.rooms-table thead th:nth-child(4) {
+  width: 200px;
+}
+
+/* Subjects page (DM-4, layout spec "List pages for classes, rooms, and subjects"): the
+   subject as a tag takes what's left, Cards 10%, actions 200px. */
+.subjects-table thead th:nth-child(2) {
+  width: 10%;
+}
+
+.subjects-table thead th:nth-child(3) {
+  width: 200px;
+}
+
+/* The subject form's preview keeps the tag its own width. */
+.subject-preview {
+  align-items: flex-start;
+}
+
+/* The subject form's preview (SYSTEM_DESIGN §10.5): the tag beside a card as it sits on
+   the grid, in a slot of about a grid block's size. */
+.subject-preview-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.subject-preview-slot {
+  position: relative;
+  width: 160px;
+  height: 64px;
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px var(--line-grid);
+}
+
+.subject-preview-slot .tt-card-face {
+  cursor: default;
+}
+
+/* The subject form's Colors row (SYSTEM_DESIGN §10.5): From the name and Custom as the
+   shared toggle chips, the 15 palettes as round swatches (tint with the bar as a ring). The
+   native radio is hidden; the chosen option gets a --primary ring, and keyboard focus a
+   --primary outline. */
+.color-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.color-option {
+  display: inline-flex;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-pill);
+  background: var(--card-bg);
+  box-shadow: inset 0 0 0 2px var(--card-bar);
+}
+
+.color-option input:checked + .toggle-chip {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.color-option input:checked + .color-swatch {
+  box-shadow:
+    inset 0 0 0 2px var(--card-bar),
+    0 0 0 2px var(--canvas),
+    0 0 0 4px var(--primary);
+}
+
+.color-option input:focus-visible + * {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+}
+
+.color-custom {
+  display: flex;
+  gap: var(--space-xl);
+  margin-top: var(--space-xs);
+}
+
+.color-custom-field {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-caption);
+  color: var(--ink-secondary);
+}
+
+.color-custom-field input[type='color'] {
+  width: 32px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-xs);
+  background: var(--canvas);
+  cursor: pointer;
+}
+
+/* Teacher detail screen (DM-1, TC-1; layout spec "Teacher detail screen"). */
+.teacher-screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+.teacher-back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  align-self: flex-start;
+  border-color: var(--line-strong);
+  color: var(--ink);
+  font-size: var(--text-caption);
+}
+
+.teacher-back:hover {
+  background: var(--canvas-soft);
+}
+
+.teacher-head {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-sm);
+}
+
+.teacher-head > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.teacher-head h1 {
+  letter-spacing: -0.64px;
+}
+
+.teacher-details {
+  margin: var(--space-xs) 0 0;
+  color: var(--ink-mute);
+}
+
+.teacher-columns {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: var(--space-lg);
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+.teacher-panel {
+  min-height: 0;
+  overflow: hidden auto;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-panel);
+  background: var(--canvas);
+}
+
+.teacher-teaching {
+  padding: var(--space-lg) var(--space-xl);
+}
+
+.teacher-facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin: 0 0 var(--space-lg);
+}
+
+.teacher-facts dt {
+  font-size: var(--text-caption);
+  color: var(--ink-mute);
+}
+
+.teacher-facts dd {
+  margin: 0;
+  font-size: var(--text-body);
+}
+
+.teacher-subhead {
+  margin: 0 0 var(--space-xs);
+  font-size: var(--text-caption);
+  font-weight: 300;
+  color: var(--ink-mute);
+}
+
+.teacher-none {
+  color: var(--ink-mute);
+}
+
+.teacher-cards {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-caption);
+}
+
+.teacher-cards li {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.teacher-panel-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.teacher-panel-head h2 {
+  font-size: var(--text-heading-sm);
+  font-weight: 300;
+}
+
+.teacher-conditions-empty {
+  margin: var(--space-lg);
+}
+
+/* The teacher's conditions (TC-1, layout spec "Teacher detail screen"): one row per
+   condition with its switch, sentence, Edit, and Delete. */
+.teacher-panel-head .btn-with-icon {
+  margin-left: auto;
+}
+
+.condition-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.condition-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.condition-sentence {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--text-body);
+  color: var(--ink);
+}
+
+.condition-row.is-off .condition-sentence {
+  color: var(--ink-mute);
+}
+
+.condition-off {
+  font-size: var(--text-caption);
+}
+
+/* While a condition is broken on the grid: an 8px dot and "Not met in 2 places". */
+.condition-not-met {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--dot-gap);
+  font-size: var(--text-caption);
+  color: var(--danger);
+}
+
+.condition-not-met::before {
+  content: '';
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: 50%;
+  background: var(--danger);
+}
+
+/* An on/off switch (DESIGN_SYSTEM.md, Toggles): a 34×20 pill, --primary when on. */
+.switch {
+  position: relative;
+  flex: none;
+  width: 34px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--hairline);
+  cursor: pointer;
+}
+
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-pill);
+  background: var(--canvas);
+  box-shadow: var(--shadow-1);
+  transition: transform 120ms ease-out;
+}
+
+.switch[aria-checked='true'] {
+  background: var(--primary);
+}
+
+.switch[aria-checked='true']::after {
+  transform: translateX(14px);
+}
+
+/* The condition form (TC-1, layout spec "Condition form"). */
+.dialog.condition-dialog {
+  width: 480px;
+}
+
+.condition-hint {
+  margin: 0;
+}
+
+.condition-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--hairline);
+}
+
+.condition-number {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.number-input {
+  width: 72px;
+}
+
+.condition-fields .segmented {
+  align-self: flex-start;
+}
+
+.condition-fields .segmented + .toggle-chips {
+  margin-top: var(--space-xs);
+}
+
+.toggle-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* Toggle chips (DESIGN_SYSTEM.md, Pill tags/chips): filter-chip size, --ink fill when on. */
+.toggle-chip {
+  padding: var(--chip-padding);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--canvas);
+  font: inherit;
+  font-size: var(--text-caption);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.toggle-chip[aria-pressed='true'] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--on-primary);
+}
+
+.toggle-chips[aria-invalid='true'] .toggle-chip {
+  border-color: var(--danger);
+}
+
+.field-label {
+  font-size: var(--text-caption);
+  font-weight: 400;
+  color: var(--ink-secondary);
+}
+
+.condition-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-md);
+  background: var(--canvas-soft);
+}
+
+.condition-preview-hint {
+  color: var(--ink-mute);
+}
+
+/* Something didn't work: the danger colors with a 4px edge, 13px text. The save notice
+   and the list pages' notice line share it (R4-2 review). */
+.danger-notice {
+  padding: var(--space-md) var(--space-lg);
+  border-left: 4px solid var(--danger);
+  border-radius: var(--radius-md);
+  background: var(--danger-bg);
+  color: var(--ink);
+  font-size: var(--text-caption);
+}
+
+/* Where the notices drop down under the header, over the screen, so nothing on the page
+   moves (layout spec, changed 2026-10-21): the save notice, then the export notice under it
+   when both are up (R4-5 review). The stack lets clicks through between notices. */
+.notice-stack {
+  position: fixed;
+  top: calc(var(--header-height) + var(--space-md));
+  left: 50%;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  width: min(600px, calc(100vw - 2 * var(--space-xl)));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+/* The last save failed (TB-7), or an export finished. */
+.save-notice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  box-shadow: var(--shadow-2);
+  pointer-events: auto;
+  animation: save-notice-drop 180ms ease-out;
+}
+
+/* After an export (layout spec, Export notice): the save notice's frame, white with a
+   `--primary` edge, since the app has no success color. */
+.export-notice {
+  padding: var(--space-md) var(--space-lg);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius-md);
+  background: var(--canvas);
+  color: var(--ink);
+}
+
+.export-notice-title {
+  font-size: var(--text-body);
+}
+
+.export-notice .caption {
+  color: var(--ink-mute);
+}
+
+.save-notice-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.save-notice-text p {
+  margin: 0;
+}
+
+.save-notice-title {
+  color: var(--danger);
+  font-weight: 400;
+}
+
+.save-notice-actions {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+@keyframes save-notice-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .save-notice {
+    animation: none;
+  }
+}
+
+/* Shown in place of the app when the saved file can't be read (TB-7). */
+.notice-screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-width: 640px;
+  padding: var(--space-xxl) var(--space-xl);
+}
+
+.notice-screen p {
+  margin: 0;
+}
+
+.notice-reason {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.notice-actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-block: var(--space-sm);
+}
+
+/* The damaged-file screen's other profiles (R4-2 review): one Open pill each, wrapping. */
+.notice-profiles {
+  flex-wrap: wrap;
+}
+
+/* Timetable screen: the class bar across the top, then the side panel on the left and
+   the grid and period summary on the right. Everything fits at 1440 × 900 without page
+   scroll. */
+.timetable-screen {
+  flex: 1 1 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 288px minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'bar bar'
+    'pool grid'
+    'pool summary';
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+}
+
+/* Class bar: grade tabs and class tiles, then the class on screen. */
+.class-bar {
+  /* The class tiles' height, which also sets the picker row's (R5-1c review). */
+  --class-tile-height: 41px;
+  grid-area: bar;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  min-width: 0;
+}
+
+.class-picker {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  min-width: 0;
+  /* As tall as the tile row (a tile, `.class-tiles`' padding, and the badges' room), so
+     the bar keeps its height with no grades (DM-8), when the row has only the tabs. */
+  min-height: calc(var(--class-tile-height) + 2 * var(--space-xxs) + var(--space-sm));
+}
+
+.class-picker .segmented {
+  flex: none;
+}
+
+/* No grades yet (DM-8): a line and Add grades in place of the tabs and tiles; the row
+   keeps the picker's height. */
+.class-picker-empty p {
+  margin: 0;
+  color: var(--ink-mute);
+}
+
+/* The Grades dialog's list (DM-8, layout spec "Grades"): a row per grade, its name, its
+   class count, and Edit and Delete on the right. Many grades scroll inside the dialog. */
+.grades-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 360px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.grades-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.grades-row:last-child {
+  border-bottom: 0;
+}
+
+.grades-row-name {
+  font-size: var(--text-button-sm);
+  font-weight: 400;
+}
+
+.grades-row .caption {
+  color: var(--ink-mute);
+}
+
+.grades-row-actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-left: auto;
+}
+
+.grade-input {
+  width: 120px;
+}
+
+/* The chosen grade is a dark pill on a white track. */
+.segmented-dark {
+  background: var(--canvas);
+  border-color: var(--line-strong);
+}
+
+.segmented-dark .segmented-option[aria-checked='true'] {
+  background: var(--ink);
+  box-shadow: none;
+  color: var(--on-primary);
+}
+
+.class-tiles {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-sm);
+  min-width: 0;
+  /* Room for the focus ring, and 8px more on top for the issue badges, so nothing moves
+     when one appears; scrolls sideways if a grade has many classes, or the grade tabs
+     leave it little room. The scrollbar's room under the tiles is always kept, so the bar
+     doesn't grow when it appears (R5-1c review, 2026-11-09): the row is a fixed height with
+     that room in place of its bottom padding, and hangs that much less the bottom padding
+     into the gap below, so it takes the picker's height either way. */
+  height: calc(
+    var(--class-tile-height) + var(--space-xxs) + var(--space-sm) + var(--scrollbar-width)
+  );
+  margin-bottom: calc(var(--space-xxs) - var(--scrollbar-width));
+  padding: var(--space-xxs);
+  padding-top: calc(var(--space-xxs) + var(--space-sm));
+  padding-bottom: 0;
+  overflow: auto hidden;
+}
+
+/* Class tiles are small square-cornered tiles, as in the class picker design, not pills.
+   They have a fixed height, so the bar keeps its height on a grade that only has the
+   New class tile. */
+.class-tile {
+  position: relative;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  height: var(--class-tile-height);
+  min-width: 64px;
+  padding: 0 var(--space-lg);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--canvas);
+  font: inherit;
+  font-size: var(--text-caption);
+  font-weight: 400;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.class-tile:hover {
+  background: var(--canvas-soft);
+}
+
+.class-tile:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.class-tile[aria-current='true'] {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.class-tile-bar {
+  width: 100%;
+  height: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--hairline);
+  overflow: hidden;
+}
+
+.class-tile-bar span {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--ink-mute);
+}
+
+.class-tile[aria-current='true'] .class-tile-bar span {
+  background: var(--primary);
+}
+
+/* Issue counts on a tile's top-right corner, half over its border like a badge, so the
+   tile never changes size (TB-1, TC-3; layout spec "Class bar"). */
+.class-tile-badges {
+  position: absolute;
+  top: -8px;
+  right: -6px;
+  display: flex;
+  gap: var(--space-xxs);
+}
+
+.class-tile-badge {
+  height: 16px;
+  min-width: 16px;
+  padding: var(--badge-padding);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--badge-ring);
+  font-size: var(--text-break);
+  font-weight: 400;
+  line-height: 16px;
+  text-align: center;
+  font-feature-settings: 'tnum';
+}
+
+.class-tile-badge.is-error {
+  background: var(--danger);
+  color: var(--on-primary);
+}
+
+.class-tile-badge.is-warning {
+  background: var(--warning-bg);
+  color: var(--warning-ink);
+}
+
+.class-tile-new {
+  flex-direction: row;
+  border-style: dashed;
+  color: var(--primary);
+}
+
+.class-bar-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  min-width: 0;
+}
+
+.class-bar-head h1 {
+  letter-spacing: -0.64px;
+}
+
+.class-bar-details {
+  font-size: var(--text-caption);
+  color: var(--ink-mute);
+}
+
+.class-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-left: auto;
+}
+
+/* A count shown as a pill. It isn't a control. */
+.status-pill {
+  padding: var(--space-sm) var(--space-lg);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--canvas);
+  font-size: var(--text-button-sm);
+  font-weight: 400;
+}
+
+/* The Issues pill takes the class's colors: pink with errors, amber with only warnings,
+   grey at 0 (layout spec "Class bar"). */
+.btn-issues {
+  background: var(--canvas);
+}
+
+.btn-issues.tone-error {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.btn-issues.tone-error:hover {
+  background: var(--danger-bg);
+}
+
+.btn-issues.tone-warning {
+  border-color: var(--warning-ink);
+  color: var(--warning-ink);
+}
+
+.btn-issues.tone-warning:hover {
+  background: var(--warning-bg);
+}
+
+.btn-issues.tone-none {
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+.btn-issues.tone-none .tnum {
+  color: var(--ink-mute);
+}
+
+.btn-issues.tone-none:hover {
+  background: var(--canvas-soft);
+}
+
+.btn-export {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  border-color: var(--line-strong);
+  background: var(--canvas);
+  color: var(--ink);
+}
+
+/* The Export menu (IE-2, IE-4; layout spec, Class bar): 240px, under the button, right
+   edges lined up, over the grid. */
+.export-menu-anchor {
+  position: relative;
+}
+
+.export-menu {
+  position: absolute;
+  top: calc(100% + var(--space-xs));
+  right: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  padding: var(--space-xs);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--canvas);
+  box-shadow: var(--shadow-2);
+}
+
+.export-menu:focus {
+  outline: 0;
+}
+
+.export-menu [role='group'] {
+  display: flex;
+  flex-direction: column;
+}
+
+.export-menu-heading {
+  margin: 0;
+  padding: var(--space-sm) var(--menu-item-inline) var(--space-xs);
+  font-size: var(--text-caption);
+  font-feature-settings: 'tnum';
+  color: var(--ink-mute);
+}
+
+/* Menu items are rows of a list, not buttons on a page, so they're not pills: the List-row
+   buttons exception (DESIGN_SYSTEM.md). */
+.export-menu-item {
+  padding: var(--space-sm) var(--menu-item-inline);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  font: inherit;
+  font-size: var(--text-tabular);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.export-menu-item:hover:not(:disabled),
+.export-menu-item:focus-visible {
+  outline: 0;
+  background: var(--hover-tint);
+}
+
+.export-menu-item:disabled {
+  color: var(--ink-mute);
+  cursor: default;
+}
+
+.export-menu-rule {
+  margin: var(--space-xs) 0;
+  border: 0;
+  border-top: 1px solid var(--hairline);
+}
+
+/* TC-4's question in the Export dialog, in the issues' colors. */
+.export-issues {
+  margin: 0;
+  padding: var(--issue-row-padding);
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption);
+}
+
+.export-issues.tone-error {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.export-issues.tone-warning {
+  background: var(--warning-bg);
+  color: var(--warning-ink);
+}
+
+/* Side panel */
+.side-panel {
+  grid-area: pool;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--canvas);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+}
+
+.side-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--line-grid);
+}
+
+.side-panel-tab {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  background: none;
+  font: inherit;
+  color: var(--ink-mute);
+  cursor: pointer;
+}
+
+.side-panel-tab:hover {
+  color: var(--ink);
+}
+
+.side-panel-tab[aria-selected='true'] {
+  border-bottom-color: var(--primary);
+  color: var(--ink);
+  font-weight: 400;
+}
+
+.count-badge {
+  min-width: 20px;
+  padding: 0 var(--space-xs);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-small);
+  line-height: 20px;
+  text-align: center;
+}
+
+.count-badge.tone-error {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.count-badge.tone-warning {
+  background: var(--warning-bg);
+  color: var(--warning-ink);
+}
+
+.count-badge.tone-none {
+  background: var(--hairline);
+  color: var(--ink-mute);
+}
+
+.side-panel-content:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.side-panel-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-md);
+}
+
+.side-panel-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.side-panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  /* The scrollbar's room is always kept, so the cards don't narrow when it appears. The
+     right padding is cut by the scrollbar's width, so both sides look the same. */
+  scrollbar-gutter: stable;
+  padding: 0 calc(var(--space-md) - var(--scrollbar-width)) var(--space-md) var(--space-md);
+}
+
+.side-panel-footer {
+  margin: 0;
+  padding: var(--space-sm) var(--space-md);
+  border-top: 1px solid var(--line-grid);
+}
+
+/* The Issues tab (TC-3, layout spec "Issues tab"): the scope and severity switches across
+   the panel, the Teacher and Check filters half the width each, then the list. */
+.segmented-wide {
+  display: flex;
+}
+
+/* The options keep 8px each side so "Warnings 12" fits the 288px panel (an exception to
+   the button padding, DESIGN_SYSTEM.md "Segmented switches"). */
+.segmented-wide .segmented-option {
+  flex: 1;
+  min-width: 0;
+  padding-inline: var(--space-sm);
+}
+
+/* The options share the width equally, so the label needs no width copy, and a label too
+   long for its share ends in "…". */
+.segmented-wide .segmented-label {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.segmented-wide .segmented-label::after {
+  content: none;
+}
+
+.segmented-option:disabled {
+  cursor: default;
+}
+
+.segmented[aria-disabled='true'] .segmented-option[aria-checked='false'] {
+  opacity: 0.5;
+}
+
+.issues-filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+}
+
+.issue-section-heading {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin: 0;
+  padding: var(--space-sm) var(--space-xs) var(--space-xs);
+  background: var(--canvas);
+  color: var(--ink-mute);
+  font-size: var(--text-caption);
+  font-weight: 400;
+}
+
+.issue-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.issue-row {
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+}
+
+.issue-row:hover {
+  background: var(--canvas-soft);
+}
+
+.issue-row.is-selected {
+  border-color: var(--primary);
+  background: var(--hover-tint);
+}
+
+.issue-row-button {
+  display: flex;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--issue-row-padding);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  font: inherit;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.issue-row-button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -1px;
+}
+
+.issue-dot {
+  flex: none;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  margin-top: var(--issue-dot-top);
+  border-radius: 50%;
+}
+
+.issue-dot-error {
+  background: var(--danger);
+}
+
+.issue-dot-warning {
+  background: var(--warning-ink);
+}
+
+.issue-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+  min-width: 0;
+}
+
+.issue-message {
+  font-size: var(--text-caption);
+  font-weight: 300;
+}
+
+.issue-where {
+  font-size: var(--text-small);
+  color: var(--ink-mute);
+}
+
+/* "Also in [Show 7B1]" under the selected issue, lined up with its words. */
+.issue-also {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs) var(--dot-gap);
+  padding: 0 var(--space-md) var(--space-md)
+    calc(var(--space-md) + var(--dot-size) + var(--space-sm));
+  font-size: var(--text-small);
+  color: var(--ink-mute);
+}
+
+.btn-show-class {
+  font-size: var(--text-caption);
+}
+
+.btn-show-class:hover {
+  background: var(--hover-tint);
+}
+
+.issues-empty {
+  align-items: center;
+  color: var(--ink-mute);
+}
+
+.issues-empty p {
+  color: var(--ink);
+}
+
+/* The class's cards, styled like timetable slots (layout spec, Subjects tab). */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Grouped by teacher: a heading per teacher that sticks to the top while its cards scroll. */
+.card-group + .card-group {
+  margin-top: var(--space-sm);
+}
+
+.card-group-heading {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin: 0;
+  padding: var(--space-sm) 0;
+  background: var(--canvas);
+  color: var(--ink-mute);
+  font-size: var(--text-caption);
+  font-weight: 400;
+}
+
+.subject-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xxs);
+  width: 100%;
+  height: 84px;
+  padding: var(--space-sm);
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: var(--card-bg);
+  color: var(--card-ink);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.subject-card:hover {
+  box-shadow: inset 0 0 0 1px var(--card-bar);
+}
+
+.subject-card-name {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: var(--text-body);
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subject-card-meta {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: var(--text-small);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.btn-with-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.side-panel-footer .btn-with-icon {
+  width: 100%;
+}
+
+.empty-state .btn-with-icon {
+  align-self: center;
+  margin-top: var(--space-sm);
+}
+
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  color: var(--ink-mute);
+}
+
+.search-field:focus-within {
+  border-color: var(--primary);
+}
+
+.search-field input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--text-caption);
+  color: var(--ink);
+}
+
+.segmented {
+  display: inline-flex;
+  padding: var(--space-xxs);
+  border-radius: var(--radius-pill);
+  background: var(--canvas-soft);
+  border: 1px solid var(--line-grid);
+}
+
+.segmented-option {
+  padding: var(--space-sm) var(--space-lg);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  font: inherit;
+  font-size: var(--text-caption);
+  color: var(--ink-mute);
+  cursor: pointer;
+}
+
+.segmented-option[aria-checked='true'] {
+  background: var(--canvas);
+  box-shadow: var(--shadow-1);
+  color: var(--ink);
+  font-weight: 400;
+}
+
+/* Each option is as wide as its label at the chosen option's weight, so the options, and
+   the class tiles beside the grade switch, don't shift when the choice changes (asked
+   2026-11-02). The copy is hidden, takes no height, and adds nothing to the name ("/ ''"),
+   as with the header menu's links. */
+.segmented-label {
+  display: inline-grid;
+}
+
+.segmented-label::after {
+  content: attr(data-label) / '';
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: 400;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-xl) var(--space-lg);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--canvas-soft);
+  text-align: center;
+}
+
+.empty-state p {
+  margin: 0;
+}
+
+/* Modal dialogs */
+.dialog {
+  width: 360px;
+  padding: var(--space-xl);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--canvas);
+  box-shadow: var(--shadow-2);
+  color: var(--ink);
+}
+
+.dialog::backdrop {
+  background: var(--backdrop);
+}
+
+.dialog form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+
+/* The card form is wider, for its inline "New …" forms. */
+.dialog-wide {
+  width: 420px;
+}
+
+.dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.dialog-body p {
+  margin: 0;
+}
+
+.dialog-actions-start {
+  margin-right: auto;
+}
+
+.btn-danger {
+  border-color: var(--danger);
+  background: var(--danger);
+  color: var(--on-primary);
+}
+
+.btn-danger-quiet {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.btn-danger-quiet:hover {
+  background: var(--danger-bg);
+}
+
+/* Adding a subject, teacher, or room under its dropdown in the card form. */
+.new-entry {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+  padding: var(--space-md);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--canvas-soft);
+}
+
+.new-entry-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.field label {
+  font-size: var(--text-caption);
+  font-weight: 400;
+  color: var(--ink-secondary);
+}
+
+/* "(optional)" after a field's label, as on the class form's assistant (DM-2). */
+.field-optional {
+  font-weight: 300;
+  color: var(--ink-mute);
+}
+
+.field p {
+  margin: 0;
+}
+
+.text-input {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--hairline-input);
+  border-radius: var(--radius-sm);
+  background: var(--canvas);
+  font: inherit;
+  color: var(--ink);
+}
+
+.text-input:focus {
+  outline: 0;
+  border-color: var(--primary);
+}
+
+.text-input[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+.field-error {
+  font-size: var(--text-caption);
+  color: var(--danger);
+}
+
+/* Timetable grid. The frame draws the outer border and scrolls when the window is too
+   short for every row's minimum height. Cells draw their own left and top lines, and the
+   grid is pulled 1px up and left so the first ones sit under the frame's border; overflow
+   on that side never scrolls, so the grid only scrolls when it really is taller. */
+.grid-region {
+  grid-area: grid;
+  min-width: 0;
+  min-height: 0;
+}
+
+.tt-frame {
+  height: 100%;
+  /* The scrollbar's strip beside the 56px day header stays the header's purple. */
+  background: linear-gradient(var(--header-bg) 56px, var(--canvas) 0) no-repeat;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-panel);
+  overflow: hidden auto;
+}
+
+.tt-grid {
+  display: grid;
+  grid-template-columns: 40px 124px repeat(5, minmax(0, 1fr));
+  width: calc(100% + 1px);
+  min-height: calc(100% + 1px);
+  margin: -1px 0 0 -1px;
+}
+
+.tt-row {
+  display: contents;
+}
+
+.tt-grid [role='cell'],
+.tt-grid [role='rowheader'],
+.tt-grid [role='columnheader'] {
+  border-left: 1px solid var(--line-grid);
+  border-top: 1px solid var(--line-grid);
+}
+
+/* Header row */
+.tt-head {
+  /* The day header stays in view when the grid scrolls, above a spotlit card (z-index 1),
+     whose outline would otherwise draw over it. */
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--header-bg);
+  color: var(--on-primary);
+  transition: background-color 120ms;
+}
+
+.tt-grid .tt-head {
+  border-color: var(--header-divider);
+}
+
+.tt-corner {
+  grid-column: 1 / span 2;
+  font-size: var(--text-caption);
+  font-weight: 400;
+}
+
+.tt-day-name {
+  font-size: var(--text-body);
+  font-weight: 400;
+}
+
+.tt-day-vi {
+  font-size: var(--text-small);
+  color: var(--header-ink-mute);
+}
+
+.tt-day.is-hovered {
+  background: var(--header-hover);
+}
+
+/* Session and period columns */
+.tt-session {
+  grid-column: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--canvas-soft);
+}
+
+.tt-session span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: var(--text-break);
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.tt-period {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 var(--space-md);
+  background: var(--canvas-soft);
+  transition: background-color 120ms;
+}
+
+.tt-period.is-hovered {
+  background: var(--hover-tint);
+}
+
+.tt-period-label {
+  font-size: var(--text-caption);
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.tt-period-time,
+.tt-period-fixed {
+  font-size: var(--text-small);
+  color: var(--ink-mute);
+}
+
+/* Fixed rows: arrival rows, short breaks, and lunch. None of them are drop targets. */
+.tt-arrival {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  overflow: hidden;
+  padding: 0 var(--space-sm);
+  background: var(--canvas-soft);
+  font-size: var(--text-small);
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.tt-arrival-note {
+  color: var(--ink-mute);
+}
+
+.tt-break {
+  grid-column: 2 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  background: var(--break-bg);
+  font-size: var(--text-break);
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.tt-lunch {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  background: var(--lunch-bg);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  color: var(--lunch-ink);
+}
+
+/* Slots: one cell per two-period block. */
+.tt-slot {
+  position: relative;
+  min-width: 0;
+  background: var(--canvas);
+}
+
+.tt-slot-empty::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: var(--space-md);
+  right: var(--space-md);
+  border-top: 1px dashed var(--line-grid);
+}
+
+.tt-slot-add {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  opacity: 0;
+  transition: opacity 120ms;
+}
+
+.tt-slot-empty:hover {
+  background: var(--canvas-soft);
+}
+
+.tt-slot-empty:hover .tt-slot-add {
+  opacity: 1;
+}
+
+.tt-slot-empty:hover::before {
+  content: none;
+}
+
+/* Cards on the grid (TB-4): a full block spans both rows, a half fills one row. The face
+   inside is the drag handle (TB-5). */
+.tt-card {
+  position: absolute;
+  left: 0;
+  right: 0;
+  min-width: 0;
+  background: var(--card-bg);
+  color: var(--card-ink);
+}
+
+.tt-card-full {
+  inset: 0;
+}
+
+.tt-card-first,
+.tt-card-second {
+  height: 50%;
+  font-size: var(--text-caption);
+}
+
+.tt-card-first {
+  top: 0;
+}
+
+/* A second-half card always carries the period line on its top edge, drawn as a shadow
+   so it takes no room: the card keeps its size whether or not the first half is filled. */
+.tt-card-second {
+  bottom: 0;
+  box-shadow: inset 0 1px 0 var(--line-grid);
+}
+
+.tt-card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  overflow: hidden;
+  text-align: center;
+  cursor: grab;
+  outline: none;
+}
+
+.tt-card-face:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--primary);
+}
+
+.tt-card-full .tt-card-face {
+  flex-direction: column;
+  gap: var(--space-xxs);
+  padding: var(--space-xs) var(--space-sm);
+}
+
+.tt-card-first .tt-card-face,
+.tt-card-second .tt-card-face {
+  gap: var(--space-xs);
+  padding: 0 var(--space-sm);
+  white-space: nowrap;
+}
+
+/* A card in an error or a warning (TC-3, layout spec "Slots"): a 2px inset ring and an 8px
+   dot 4px in from the top-right corner, in --danger or --warning-ink. An error wins. */
+.tt-card.has-error {
+  --mark: var(--danger);
+}
+
+.tt-card.has-warning {
+  --mark: var(--warning-ink);
+}
+
+.tt-card.has-error,
+.tt-card.has-warning {
+  box-shadow: inset 0 0 0 2px var(--mark);
+}
+
+/* A second-half card keeps its period line over the ring. */
+.tt-card-second.has-error,
+.tt-card-second.has-warning {
+  box-shadow:
+    inset 0 1px 0 var(--line-grid),
+    inset 0 0 0 2px var(--mark);
+}
+
+/* A half card's one line of text keeps clear of the dot on both sides, so it stays
+   centred. */
+.tt-card-first:is(.has-error, .has-warning) .tt-card-face,
+.tt-card-second:is(.has-error, .has-warning) .tt-card-face {
+  padding-inline: calc(var(--dot-size) + 2 * var(--space-xs));
+}
+
+.tt-card.has-error::after,
+.tt-card.has-warning::after {
+  content: '';
+  position: absolute;
+  top: var(--space-xs);
+  right: var(--space-xs);
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: 50%;
+  background: var(--mark);
+  pointer-events: none;
+}
+
+/* The issue spotlight (TC-3): while an issue is selected in the Issues tab, its cards keep
+   full strength with a 2px --primary outline over the grid lines, and every other placed
+   card dims. */
+.tt-card.is-lit {
+  z-index: 1;
+  outline: 2px solid var(--primary);
+}
+
+.tt-card.is-dim {
+  opacity: var(--spotlight-dim);
+}
+
+/* The card being moved stays in place, faded; a copy follows the pointer. */
+.tt-card.is-dragging {
+  opacity: 0.4;
+}
+
+.tt-card-name,
+.tt-card-meta {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tt-card-name {
+  font-weight: 400;
+}
+
+.tt-card-full .tt-card-name {
+  font-size: var(--text-body);
+}
+
+.tt-card-full .tt-card-meta {
+  font-size: var(--text-small);
+}
+
+.tt-card-first .tt-card-name,
+.tt-card-second .tt-card-name {
+  flex-shrink: 0;
+}
+
+/* Drop zones: the top third, middle third, and bottom third of a block. They only
+   tell dnd-kit where the pointer is, so they never take clicks. */
+.tt-drop-zone {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: calc(100% / 3);
+  pointer-events: none;
+}
+
+.tt-drop-zone-first {
+  top: 0;
+}
+
+.tt-drop-zone-full {
+  top: calc(100% / 3);
+}
+
+.tt-drop-zone-second {
+  bottom: 0;
+}
+
+/* The drop preview (layout spec): lavender at 60% over the whole block or one half. */
+.tt-drop-preview {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  background: var(--primary-subdued);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.tt-drop-preview-full {
+  inset: 0;
+}
+
+.tt-drop-preview-first {
+  top: 0;
+  height: 50%;
+}
+
+.tt-drop-preview-second {
+  bottom: 0;
+  height: 50%;
+}
+
+/* The panel card being dragged stays in place, faded; a copy follows the pointer. */
+.subject-card.is-dragging {
+  opacity: 0.4;
+}
+
+.subject-card.is-overlay {
+  box-shadow: var(--shadow-2);
+  cursor: grabbing;
+}
+
+/* Periods per subject */
+.period-summary {
+  grid-area: summary;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--canvas);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-panel);
+}
+
+.period-summary-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+}
+
+.period-summary-head h2 {
+  font-size: var(--text-caption);
+  font-weight: 400;
+}
+
+.period-summary-head .tnum {
+  font-size: var(--text-caption);
+  color: var(--ink-mute);
+}
+
+/* The empty-state line is as tall as a row of tags, so the summary, and the grid above
+   it, keep their height when the first card goes on the grid. */
+.period-summary .caption {
+  margin: 0;
+  padding: var(--space-xxs) 0;
+}
+
+.period-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A subject's name on its tint, in the "Periods per subject" panel and the Cards page. */
+.period-tag,
+.subject-tag {
+  display: inline-flex;
+  gap: var(--space-xs);
+  padding: var(--space-xxs) var(--space-sm);
+  border-radius: var(--radius-xs);
+  background: var(--card-bg);
+  color: var(--card-ink);
+  font-size: var(--text-caption);
+}
+
+.period-tag .tnum {
+  font-weight: 400;
+}
+
+/* Subject palettes. Cards and summary tags set these on their element and read the
+   --card-* variables. */
+.subject-math {
+  --card-bg: var(--subject-math-bg);
+  --card-bar: var(--subject-math-bar);
+  --card-ink: var(--subject-math-ink);
+}
+.subject-literature {
+  --card-bg: var(--subject-literature-bg);
+  --card-bar: var(--subject-literature-bar);
+  --card-ink: var(--subject-literature-ink);
+}
+.subject-english {
+  --card-bg: var(--subject-english-bg);
+  --card-bar: var(--subject-english-bar);
+  --card-ink: var(--subject-english-ink);
+}
+.subject-biology {
+  --card-bg: var(--subject-biology-bg);
+  --card-bar: var(--subject-biology-bar);
+  --card-ink: var(--subject-biology-ink);
+}
+.subject-chemistry {
+  --card-bg: var(--subject-chemistry-bg);
+  --card-bar: var(--subject-chemistry-bar);
+  --card-ink: var(--subject-chemistry-ink);
+}
+.subject-physics {
+  --card-bg: var(--subject-physics-bg);
+  --card-bar: var(--subject-physics-bar);
+  --card-ink: var(--subject-physics-ink);
+}
+.subject-history {
+  --card-bg: var(--subject-history-bg);
+  --card-bar: var(--subject-history-bar);
+  --card-ink: var(--subject-history-ink);
+}
+.subject-geography {
+  --card-bg: var(--subject-geography-bg);
+  --card-bar: var(--subject-geography-bar);
+  --card-ink: var(--subject-geography-ink);
+}
+.subject-civics {
+  --card-bg: var(--subject-civics-bg);
+  --card-bar: var(--subject-civics-bar);
+  --card-ink: var(--subject-civics-ink);
+}
+.subject-technology {
+  --card-bg: var(--subject-technology-bg);
+  --card-bar: var(--subject-technology-bar);
+  --card-ink: var(--subject-technology-ink);
+}
+.subject-informatics {
+  --card-bg: var(--subject-informatics-bg);
+  --card-bar: var(--subject-informatics-bar);
+  --card-ink: var(--subject-informatics-ink);
+}
+.subject-pe {
+  --card-bg: var(--subject-pe-bg);
+  --card-bar: var(--subject-pe-bar);
+  --card-ink: var(--subject-pe-ink);
+}
+.subject-music {
+  --card-bg: var(--subject-music-bg);
+  --card-bar: var(--subject-music-bar);
+  --card-ink: var(--subject-music-ink);
+}
+.subject-art {
+  --card-bg: var(--subject-art-bg);
+  --card-bar: var(--subject-art-bar);
+  --card-ink: var(--subject-art-ink);
+}
+.subject-homeroom {
+  --card-bg: var(--subject-homeroom-bg);
+  --card-bar: var(--subject-homeroom-bar);
+  --card-ink: var(--subject-homeroom-ink);
+}
+
+/* Form dropdowns (SelectInput.tsx): an input like the others, its text stopping short of
+   the chevron (asked for on 2026-10-26, when the system's arrow sat too close to the edge). */
+.select-input {
+  position: relative;
+  display: flex;
+}
+
+.select-input select {
+  padding-right: var(--select-chevron-room);
+}
+
+.select-input svg {
+  color: var(--ink-mute);
+}
+
+/* What every dropdown shares, in a form (.select-input) or a filter pill (.filter-select):
+   the app's chevron 12px in from the right edge in place of the system's arrow, and the text
+   kept clear of it (R2 dropdown review, 2026-10-26). */
+:is(.filter-select, .select-input) select {
+  flex: 1;
+  min-width: 0;
+  appearance: none;
+  cursor: pointer;
+}
+
+:is(.filter-select, .select-input) svg {
+  position: absolute;
+  top: 50%;
+  right: var(--space-md);
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* A dropdown that can't be used doesn't look clickable. */
+:is(.filter-select, .select-input) select:disabled {
+  cursor: default;
+}
+
+:is(.filter-select, .select-input):has(select:disabled) svg {
+  opacity: 0.5;
+}
+
+/* Import screen (IE-1, layout spec "Import screen"): the choices and the results, each a
+   panel scrolling inside itself, so the page never scrolls. */
+/* Only the file's name gives way to a long name; the title row's pills keep their words on
+   one line. */
+.import-file {
+  flex: 0 1 auto;
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.import-file ~ .btn {
+  flex: none;
+}
+
+.import-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: var(--space-lg);
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+.import-panel {
+  min-height: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-panel);
+  background: var(--canvas);
+}
+
+.import-choices {
+  overflow: hidden auto;
+}
+
+.import-section {
+  padding: var(--space-lg);
+}
+
+.import-section + .import-section {
+  border-top: 1px solid var(--hairline);
+}
+
+.import-about {
+  margin: var(--space-xs) 0 var(--space-md);
+  color: var(--ink-mute);
+}
+
+.import-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm) var(--space-md);
+}
+
+.import-row .select-input {
+  width: 240px;
+}
+
+.import-name {
+  width: 260px;
+}
+
+.import-name-error {
+  margin: var(--space-xs) 0 0;
+}
+
+.import-header-row {
+  width: 72px;
+}
+
+.import-found {
+  margin: var(--space-sm) 0 0;
+  color: var(--ink-mute);
+}
+
+.import-table {
+  width: 100%;
+  margin-top: var(--space-md);
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: var(--text-caption);
+}
+
+.import-table thead th:nth-child(1) {
+  width: 28%;
+}
+
+.import-table thead th:nth-child(3) {
+  width: 40%;
+}
+
+.import-table thead th {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--line-strong);
+  background: var(--canvas-soft);
+  font-weight: 400;
+  text-align: left;
+}
+
+.import-table td,
+.import-table tbody th {
+  padding: var(--space-xs) var(--space-md);
+  border-top: 1px solid var(--hairline);
+  font-weight: 300;
+  text-align: left;
+}
+
+.import-table .field-error {
+  margin: var(--space-xs) 0 0;
+}
+
+.import-values {
+  overflow: hidden;
+  color: var(--ink-mute);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.import-results {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.import-results-body {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden auto;
+  padding: var(--space-lg);
+}
+
+.import-before {
+  margin: 0;
+  font-size: var(--text-body);
+  color: var(--ink-mute);
+}
+
+.import-found-rows {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-lg);
+}
+
+.import-found-rows dt {
+  font-size: var(--text-caption);
+  color: var(--ink-mute);
+}
+
+.import-found-rows dd {
+  margin: 0;
+  font-size: var(--text-body);
+}
+
+.import-found-rows .caption,
+.import-results-body h2 .caption,
+.import-results-body > .caption {
+  color: var(--ink-mute);
+}
+
+.import-bell {
+  margin: 0 0 var(--space-lg);
+}
+
+.import-problems {
+  margin: var(--space-sm) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-caption);
+}
+
+.import-problems li {
+  padding: var(--space-sm) 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.import-problem-place {
+  display: block;
+  font-weight: 400;
+}
+
+.import-foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border-top: 1px solid var(--hairline);
+}
+
+.import-stale {
+  margin: 0;
+  color: var(--ink-mute);
+}
+
+/* Why Import didn't go ahead (a save failing, the copy not kept, a name taken meanwhile). */
+.import-error {
+  margin: 0;
+}
+
+.import-foot-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
